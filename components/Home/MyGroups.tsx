@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useAccount } from 'wagmi'
 import { useFrame } from '@/components/farcaster-provider'
+import { FaUsers, FaClock, FaCheckCircle, FaSpinner, FaExclamationCircle, FaWallet } from 'react-icons/fa'
+import { IoIosArrowBack } from 'react-icons/io'
 
 interface GroupMember {
   inboxId: string
@@ -79,57 +81,147 @@ export default function MyGroups() {
   }
 
   if (!address) {
-    return <div className="p-4 text-center text-gray-500">Connect your wallet to see groups.</div>
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] p-8 animate-fade-in">
+        <div className="glass-dark rounded-3xl p-8 max-w-md w-full text-center border border-white/10">
+          <div className="w-20 h-20 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <FaWallet className="text-4xl text-blue-400" />
+          </div>
+          <h3 className="text-xl font-bold text-white mb-2">Wallet Not Connected</h3>
+          <p className="text-white/70">Connect your wallet to view and join groups</p>
+        </div>
+      </div>
+    )
   }
 
   if (loading) {
-    return <div className="p-4 text-center text-gray-500">Loading groups...</div>
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] p-8 animate-fade-in">
+        <div className="glass-dark rounded-3xl p-8 max-w-md w-full text-center border border-white/10">
+          <FaSpinner className="text-5xl text-blue-400 mx-auto mb-4 animate-spin" />
+          <h3 className="text-xl font-bold text-white mb-2">Loading Groups</h3>
+          <p className="text-white/70">Fetching your available groups...</p>
+        </div>
+      </div>
+    )
   }
 
   if (error) {
-    return <div className="p-4 text-center text-red-500">{error}</div>
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] p-8 animate-fade-in">
+        <div className="glass-dark rounded-3xl p-8 max-w-md w-full text-center border border-red-500/30">
+          <FaExclamationCircle className="text-5xl text-red-400 mx-auto mb-4" />
+          <h3 className="text-xl font-bold text-white mb-2">Error Loading Groups</h3>
+          <p className="text-red-300">{error}</p>
+        </div>
+      </div>
+    )
   }
 
   if (groups.length === 0) {
-    return <div className="p-4 text-center text-gray-500">No groups found.</div>
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] p-8 animate-fade-in">
+        <div className="glass-dark rounded-3xl p-8 max-w-md w-full text-center border border-white/10">
+          <div className="w-20 h-20 bg-gradient-to-br from-gray-500/20 to-gray-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <FaUsers className="text-4xl text-gray-400" />
+          </div>
+          <h3 className="text-xl font-bold text-white mb-2">No Groups Found</h3>
+          <p className="text-white/70">You don't have any groups available at the moment</p>
+        </div>
+      </div>
+    )
   }
 
   // Filter out groups the user has already joined
   const availableGroups = groups.filter(group => joinedGroupIds.includes(group.groupId))
 
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">Available Groups</h2>
-      <ul className="space-y-3">
-        {availableGroups.length > 0 ? availableGroups.map(group => {
-          const status = joinStatus[group.groupId]
-          return (
-            <li key={group.groupId} className="p-4 bg-white rounded shadow flex flex-col md:flex-row md:items-center md:justify-between">
-              <div>
-                <div className="font-semibold">{group.groupName}</div>
-                <div className="text-xs text-gray-500">Group ID: {group.groupId}</div>
-                <div className="text-xs text-gray-400">Last updated: {new Date(group.lastUpdated).toLocaleString()}</div>
+    <div className="w-full max-w-4xl mx-auto p-4 animate-fade-in">
+      <div className="mb-6">
+        <h2 className="text-3xl font-bold gradient-text mb-2 flex items-center gap-3">
+          <FaUsers className="text-blue-600" />
+          My Groups
+        </h2>
+        <p className="text-gray-600">Groups you've joined and can participate in</p>
+      </div>
+
+      {availableGroups.length > 0 ? (
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {availableGroups.map(group => {
+            const status = joinStatus[group.groupId]
+            const memberCount = group.members?.length || 0
+            return (
+              <div
+                key={group.groupId}
+                className="glass-dark rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all duration-300 hover:shadow-2xl hover:scale-105 group"
+              >
+                <div className="flex items-start justify-between mb-4">
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                    <FaUsers className="text-white text-xl" />
+                  </div>
+                  {status === 'joined' && (
+                    <div className="flex items-center gap-1 text-green-400 bg-green-500/20 px-2 py-1 rounded-full">
+                      <FaCheckCircle className="text-sm" />
+                      <span className="text-xs font-semibold">Joined</span>
+                    </div>
+                  )}
+                </div>
+
+                <h3 className="text-lg font-bold text-white mb-2 line-clamp-1">{group.groupName}</h3>
+                
+                <div className="space-y-2 mb-4">
+                  <div className="flex items-center gap-2 text-white/60 text-sm">
+                    <FaUsers className="text-xs" />
+                    <span>{memberCount} {memberCount === 1 ? 'member' : 'members'}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-white/60 text-sm">
+                    <FaClock className="text-xs" />
+                    <span className="truncate">{new Date(group.lastUpdated).toLocaleDateString()}</span>
+                  </div>
+                </div>
+
+                <div className="pt-4 border-t border-white/10">
+                  {status === 'joined' ? (
+                    <div className="w-full bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-300 font-semibold py-2 px-4 rounded-lg text-center text-sm border border-green-500/30">
+                      <FaCheckCircle className="inline mr-2" />
+                      Joined
+                    </div>
+                  ) : (
+                    <button
+                      className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-2 px-4 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
+                      disabled={status === 'loading'}
+                      onClick={() => handleJoin(group.groupId)}
+                    >
+                      {status === 'loading' ? (
+                        <>
+                          <FaSpinner className="animate-spin" />
+                          <span>Joining...</span>
+                        </>
+                      ) : (
+                        <span>Join Group</span>
+                      )}
+                    </button>
+                  )}
+                  {status && status !== 'joined' && status !== 'loading' && (
+                    <div className="mt-2 text-xs text-red-400 flex items-center gap-1">
+                      <FaExclamationCircle />
+                      <span>{status}</span>
+                    </div>
+                  )}
+                </div>
               </div>
-              <div className="mt-2 md:mt-0">
-                {status === 'joined' ? (
-                  <span className="text-green-600 font-semibold">Joined</span>
-                ) : (
-                  <button
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:bg-gray-400"
-                    disabled={status === 'loading'}
-                    onClick={() => handleJoin(group.groupId)}
-                  >
-                    {status === 'loading' ? 'Joining...' : 'Join Group'}
-                  </button>
-                )}
-                {status && status !== 'joined' && status !== 'loading' && (
-                  <div className="text-xs text-red-500 mt-1">{status}</div>
-                )}
-              </div>
-            </li>
-          )
-        }) : <div className="text-center text-gray-500">No available groups</div>}
-      </ul>
+            )
+          })}
+        </div>
+      ) : (
+        <div className="glass-dark rounded-3xl p-8 text-center border border-white/10">
+          <div className="w-20 h-20 bg-gradient-to-br from-gray-500/20 to-gray-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <FaUsers className="text-4xl text-gray-400" />
+          </div>
+          <h3 className="text-xl font-bold text-white mb-2">No Available Groups</h3>
+          <p className="text-white/70">You haven't joined any groups yet</p>
+        </div>
+      )}
     </div>
   )
 } 

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 
-import { FaUserCircle, FaWallet } from 'react-icons/fa'
+import { FaUserCircle, FaWallet, FaChess, FaUsers, FaGamepad } from 'react-icons/fa'
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io'
 import { IoMdLogOut } from 'react-icons/io'
 import { farcasterFrame } from '@farcaster/frame-wagmi-connector'
@@ -117,81 +117,98 @@ export function Demo() {
   }, [address])
 
   return (
-    <div className="min-h-screen w-[100%] bg-gray-100 flex flex-col">
+    <div className="min-h-screen w-full bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 flex flex-col">
       {/* Header with Profile */}
-      <header className="bg-white shadow-sm">
-        
-        <div className="max-w-7xl mx-auto px-4 py-2 flex items-center relative">
+      <header className="glass-dark border-b border-white/10 backdrop-blur-xl">
+        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between relative">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+              <span className="text-white text-xl font-bold">C</span>
+            </div>
+            <h1 className="text-xl font-bold gradient-text hidden sm:block">Coordi</h1>
+          </div>
+          
           {selectedGame === 'connectfour' && (
             <button
               onClick={() => setSelectedGame(null)}
-              className="flex items-center text-gray-600 hover:text-gray-800"
+              className="flex items-center text-gray-700 hover:text-gray-900 transition-colors px-3 py-2 rounded-lg hover:bg-white/20"
             >
               <IoIosArrowBack className="mr-1" />
-              Back to Games
+              <span className="hidden sm:inline">Back to Games</span>
             </button>
           )}
+          
           <div className="relative ml-auto">
             <button
               onClick={() => setShowProfileMenu(!showProfileMenu)}
-              className="text-gray-600 hover:text-gray-800"
+              className="relative transition-transform hover:scale-110 duration-200"
             >
               {context?.user ? (
                 <>
                   {context?.user?.pfpUrl && (
-                    <img
-                      src={context?.user?.pfpUrl}
-                      className="w-10 h-10 rounded-full"
-                      alt="User Profile"
-                      width={45}
-                      height={45}
-                    />
+                    <div className="relative">
+                      <img
+                        src={context?.user?.pfpUrl}
+                        className="w-12 h-12 rounded-full border-2 border-white/30 shadow-lg ring-2 ring-blue-500/20"
+                        alt="User Profile"
+                        width={48}
+                        height={48}
+                      />
+                      {isConnected && (
+                        <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white shadow-lg"></div>
+                      )}
+                    </div>
                   )}
                 </>
               ) : (
-                <p className="text-sm text-left">User context not available</p>
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-gray-300 to-gray-400 flex items-center justify-center">
+                  <FaUserCircle className="text-white text-2xl" />
+                </div>
               )}
             </button>
             
             {showProfileMenu && (
-              <div className="absolute right-0 mt-2 w-64 bg-black rounded-md shadow-lg py-1 z-10">
+              <div className="absolute right-0 mt-3 w-72 glass-dark rounded-2xl shadow-2xl py-2 z-50 animate-slide-down border border-white/10">
                 {!isConnected ? (
                   <button
-                    className="flex items-center w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-700"
+                    className="flex items-center w-full text-left px-4 py-3 text-sm text-white hover:bg-white/10 transition-colors rounded-lg mx-2"
                     onClick={() => {
                       connect({ connector: farcasterFrame() })
                       setShowProfileMenu(false)
                     }}
                   >
-                    <FaWallet className="mr-2" />
-                    Connect Wallet
+                    <FaWallet className="mr-3 text-lg" />
+                    <span className="font-medium">Connect Wallet</span>
                   </button>
                 ) : (
                   <>
-                    <div className="px-4 py-2 border-b border-gray-700">
-                      <p className="text-sm text-gray-300 truncate">
-                        {address}
+                    <div className="px-4 py-3 border-b border-white/10 mx-2">
+                      <p className="text-sm text-white/90 font-medium truncate mb-1">
+                        {context?.user?.displayName || 'User'}
                       </p>
-                      <p className="text-xs text-gray-400 mt-1">
+                      <p className="text-xs text-white/60 font-mono truncate">
+                        {address?.slice(0, 6)}...{address?.slice(-4)}
+                      </p>
+                      <p className="text-xs text-white/50 mt-1">
                         Chain ID: {chainId}
                       </p>
                     </div>
                     <button
-                      className="flex items-center w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-700"
+                      className="flex items-center w-full text-left px-4 py-3 text-sm text-white hover:bg-white/10 transition-colors rounded-lg mx-2"
                       onClick={handleChangeAccount}
                     >
-                      <FaUserCircle className="mr-2" />
-                      Change Account
+                      <FaUserCircle className="mr-3 text-lg" />
+                      <span className="font-medium">Change Account</span>
                     </button>
                     <button
-                      className="flex items-center w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-700"
+                      className="flex items-center w-full text-left px-4 py-3 text-sm text-red-300 hover:bg-red-500/20 transition-colors rounded-lg mx-2"
                       onClick={() => {
                         disconnect()
                         setShowProfileMenu(false)
                       }}
                     >
-                      <IoMdLogOut className="mr-2" />
-                      Disconnect
+                      <IoMdLogOut className="mr-3 text-lg" />
+                      <span className="font-medium">Disconnect</span>
                     </button>
                   </>
                 )}
@@ -202,48 +219,64 @@ export function Demo() {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 scroll-bar-hidden max-w-7xl mx-auto px-4 py-8 w-full">
+      <main className="flex-1 scrollbar-hide max-w-7xl mx-auto px-4 py-8 w-full">
         {showMyGroupInfo ? (
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center animate-fade-in">
             <MyGroupInfo />
             <button
-              className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+              className="mt-6 btn-primary"
               onClick={() => setShowMyGroupInfo(false)}
             >
-              Back to Main
+              ← Back to Main
             </button>
           </div>
         ) : showMyGroups ? (
-          <MyGroups />
+          <div className="animate-fade-in">
+            <MyGroups />
+          </div>
         ) : selectedGame === 'connectfour' ? (
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center animate-fade-in">
             {/* Connect Four game implementation and references removed */}
           </div>
         ) : selectedGame === 'chesspvp' ? (
-          <ChessGame setSelectedGame={setSelectedGame} />
+          <div className="animate-fade-in">
+            <ChessGame setSelectedGame={setSelectedGame} />
+          </div>
         ) : (
-          <>
-            <h1 className="text-3xl text-black font-bold text-center mb-8">Select a Game</h1>
+          <div className="animate-fade-in">
+            <div className="text-center mb-12">
+              <h1 className="text-5xl font-bold gradient-text mb-4">Select a Game</h1>
+              <p className="text-gray-600 text-lg">Challenge friends, place bets, and win rewards</p>
+            </div>
             
             {/* Game Carousel */}
-            <div className="relative max-w-4xl mx-auto">
+            <div className="relative max-w-5xl mx-auto">
               <div 
-                className="overflow-hidden rounded-lg shadow-lg cursor-pointer"
+                className="overflow-hidden rounded-3xl shadow-2xl cursor-pointer card-hover group"
                 onClick={() => handleGameSelect(games[currentGameIndex].id)}
               >
                 <div className="relative">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-10"></div>
                   <img
                     src={games[currentGameIndex].image}
                     alt={games[currentGameIndex].title}
-                    className="w-full h-[400px] object-cover"
+                    className="w-full h-[500px] object-cover group-hover:scale-110 transition-transform duration-500"
                   />
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
-                    <h2 className="text-2xl font-bold text-white mb-2">
-                      {games[currentGameIndex].title}
-                    </h2>
-                    <p className="text-white/90">
+                  <div className="absolute bottom-0 left-0 right-0 p-8 z-20">
+                    <div className="flex items-center space-x-3 mb-3">
+                      <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                        <FaChess className="text-white text-2xl" />
+                      </div>
+                      <h2 className="text-4xl font-bold text-white drop-shadow-lg">
+                        {games[currentGameIndex].title}
+                      </h2>
+                    </div>
+                    <p className="text-white/90 text-lg mb-4 drop-shadow-md">
                       {games[currentGameIndex].description}
                     </p>
+                    <div className="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-md px-4 py-2 rounded-full border border-white/30">
+                      <span className="text-white text-sm font-medium">Click to Play →</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -251,58 +284,66 @@ export function Demo() {
               {/* Navigation Buttons */}
               <button
                 onClick={prevGame}
-                className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/60 hover:bg-white p-2 rounded-full shadow-lg"
+                className="absolute left-4 top-1/2 -translate-y-1/2 glass hover:bg-white/30 p-3 rounded-full shadow-xl transition-all duration-200 hover:scale-110 z-30"
+                aria-label="Previous game"
               >
-                <IoIosArrowBack className="text-black" size={24} />
+                <IoIosArrowBack className="text-white" size={28} />
               </button>
               <button
                 onClick={nextGame}
-                className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/60 hover:bg-white p-2 rounded-full shadow-lg"
+                className="absolute right-4 top-1/2 -translate-y-1/2 glass hover:bg-white/30 p-3 rounded-full shadow-xl transition-all duration-200 hover:scale-110 z-30"
+                aria-label="Next game"
               >
-                <IoIosArrowForward className="text-black" size={24} />
+                <IoIosArrowForward className="text-white" size={28} />
               </button>
 
               {/* Game Selection Dots */}
-              <div className="flex justify-center mt-4 space-x-2">
+              <div className="flex justify-center mt-6 space-x-3">
                 {games.map((_, index) => (
                   <button
                     key={index}
                     onClick={() => setCurrentGameIndex(index)}
-                    className={`w-3 h-3 rounded-full ${
-                      index === currentGameIndex ? 'bg-blue-600' : 'bg-gray-300'
+                    className={`transition-all duration-300 ${
+                      index === currentGameIndex 
+                        ? 'w-10 h-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full shadow-lg' 
+                        : 'w-3 h-3 bg-gray-300 hover:bg-gray-400 rounded-full'
                     }`}
+                    aria-label={`Go to game ${index + 1}`}
                   />
                 ))}
               </div>
             </div>
-          </>
+          </div>
         )}
       </main>
       {/* Footer with Switch Button */}
-      <footer className="bg-white shadow-inner py-4 mt-auto">
-        <div className="max-w-7xl mx-auto px-4 flex justify-center space-x-2">
+      <footer className="glass-dark border-t border-white/10 py-6 mt-auto backdrop-blur-xl">
+        <div className="max-w-7xl mx-auto px-4 flex justify-center space-x-4">
           {!selectedGame && !showMyGroups && !showMyGroupInfo && userInGroup === false && (
             <button
-              className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+              className="btn-primary flex items-center space-x-2"
               onClick={() => setShowMyGroups(true)}
             >
-              Show My Groups
+              <FaUsers />
+              <span>Show My Groups</span>
             </button>
           )}
           {!selectedGame && !showMyGroups && !showMyGroupInfo && userInGroup === true && (
             <button
-              className="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+              className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center space-x-2"
               onClick={() => setShowMyGroupInfo(true)}
             >
-              My Group
+              <FaGamepad />
+              <span>My Active Game</span>
             </button>
           )}
           {showMyGroups && !showMyGroupInfo && (
             <button
-              className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+              className="btn-primary flex items-center space-x-2"
               onClick={() => setShowMyGroups(false)}
             >
-              Back to Games
+              <IoIosArrowBack />
+              <span>Back to Games</span>
             </button>
           )}
         </div>

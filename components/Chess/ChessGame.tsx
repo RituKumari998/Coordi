@@ -21,6 +21,7 @@ import { StickyNav } from './StickyNav';
 import { WalletPage } from './WalletPage';
 import { waitForTransaction, waitForTransactionReceipt } from 'wagmi/actions';
 import { config } from '../wallet-provider';
+import { IoIosArrowBack } from 'react-icons/io';
 
 const CONTRACT_ADDRESS = '0x037bAAc46Be0BFcC93D2c5Ee10A43bE1Bc09d6FB';
 const socket = io('http://localhost:3001');
@@ -408,25 +409,25 @@ export default function ChessGame({ setSelectedGame }: { setSelectedGame: (v: st
     if (mode === 'choose') {
       return (
         
-        <div className="flex flex-col items-center w-full max-w-md mx-auto p-8 bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl shadow-xl border border-gray-200 space-y-6">
-             <button
+        <div className="flex flex-col items-center w-full max-w-md mx-auto p-10 glass-dark rounded-3xl shadow-2xl border border-white/20 space-y-8 animate-fade-in">
+          <button
             onClick={() => {
               setSelectedGame(null)
             }}
-            className="mb-4 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-lg shadow transition-all duration-200"
+            className="self-start mb-2 glass hover:bg-white/20 text-white font-semibold py-2 px-4 rounded-xl transition-all duration-200 flex items-center space-x-2"
           >
-            ← Back to Home
+            <IoIosArrowBack />
+            <span>Back to Home</span>
           </button>
-          <div className="flex items-center space-x-3 mb-4">
-          <StickyNav onWalletClick={() => setShowWallet(true)} />
-          {showWallet && <WalletPage onClose={() => setShowWallet(false)} />}
-            <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center">
-              <span className="text-white text-2xl">♛</span>
+          <div className="flex items-center space-x-4 mb-6">
+            <StickyNav onWalletClick={() => setShowWallet(true)} />
+            {showWallet && <WalletPage onClose={() => setShowWallet(false)} />}
+            <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+              <span className="text-white text-3xl">♛</span>
             </div>
-           
-            <h2 className="text-2xl font-bold text-gray-800">TurnOnMonad</h2>
+            <h2 className="text-3xl font-bold text-white">Chess PvP</h2>
           </div>
-          <p className="text-center text-gray-600 mb-6">Challenge your friends to a game of chess!</p>
+          <p className="text-center text-white/80 text-lg mb-8">Challenge your friends to a game of chess!</p>
           <div className="w-full space-y-4">
             <button 
               onClick={() => { 
@@ -434,16 +435,16 @@ export default function ChessGame({ setSelectedGame }: { setSelectedGame: (v: st
                 const newRoomId = generateRoomId();
                 setCreateRoomId(newRoomId);
               }} 
-              className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center justify-center space-x-2"
+              className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-semibold py-5 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center justify-center space-x-3 text-lg"
             >
-              <span className="text-xl">🎯</span>
+              <span className="text-2xl">🎯</span>
               <span>Create New Game</span>
             </button>
             <button 
               onClick={() => { setMode('join'); }} 
-              className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center justify-center space-x-2"
+              className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold py-5 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center justify-center space-x-3 text-lg"
             >
-              <span className="text-xl">🚀</span>
+              <span className="text-2xl">🚀</span>
               <span>Join Game</span>
             </button>
           </div>
@@ -452,103 +453,103 @@ export default function ChessGame({ setSelectedGame }: { setSelectedGame: (v: st
     }
     if (mode === 'create') {
       return (
-        <div className="flex flex-col items-center w-full max-w-md mx-auto p-8 bg-gradient-to-br from-green-50 to-blue-50 rounded-2xl shadow-xl border border-gray-200 space-y-6">
-          <div className="flex items-center space-x-3 mb-4">
-            <div className="w-12 h-12 bg-gradient-to-br from-green-600 to-blue-600 rounded-full flex items-center justify-center">
-              <span className="text-white text-2xl animate-pulse">🎯</span>
+        <div className="flex flex-col items-center w-full max-w-md mx-auto p-10 glass-dark rounded-3xl shadow-2xl border border-white/20 space-y-8 animate-fade-in">
+          <div className="flex items-center space-x-4 mb-6">
+            <div className="w-16 h-16 bg-gradient-to-br from-green-600 to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg animate-pulse-slow">
+              <span className="text-white text-3xl">🎯</span>
             </div>
-            <h2 className="text-2xl font-bold text-gray-800">Room Created!</h2>
+            <h2 className="text-3xl font-bold text-white">Room Created!</h2>
           </div>
-          <div className="text-center space-y-4">
-            <p className="text-gray-600">Share this code with your opponent:</p>
-            <div className="bg-white border-2 border-dashed border-gray-300 rounded-xl p-6 shadow-inner">
-              <div className="text-4xl font-mono font-bold text-gray-800 tracking-wider select-all cursor-pointer hover:text-blue-600 transition-colors">
+          <div className="text-center space-y-6 w-full">
+            <p className="text-white/80 text-lg">Share this code with your opponent:</p>
+            <div className="bg-white/10 backdrop-blur-md border-2 border-dashed border-white/30 rounded-2xl p-8 shadow-inner hover:bg-white/15 transition-all">
+              <div className="text-5xl font-mono font-bold text-white tracking-wider select-all cursor-pointer hover:text-blue-300 transition-colors">
                 {createRoomId}
               </div>
-              <p className="text-xs text-gray-500 mt-2">Click to copy</p>
+              <p className="text-xs text-white/60 mt-3">Click to copy</p>
             </div>
-            <div className="flex items-center justify-center space-x-2 text-sm text-gray-600">
-              <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse"></div>
+            <div className="flex items-center justify-center space-x-3 text-sm text-white/80 bg-white/10 px-4 py-3 rounded-xl">
+              <div className="w-3 h-3 bg-orange-400 rounded-full animate-pulse"></div>
               <span>Waiting for opponent to join...</span>
             </div>
           </div>
-          <div className="w-full flex flex-col items-center space-y-2 mt-4">
-            <label className="block text-sm font-medium text-gray-700">Bet Amount (USDC)</label>
+          <div className="w-full flex flex-col items-center space-y-4 mt-6">
+            <label className="block text-sm font-medium text-white/90 w-full">Bet Amount (USDC)</label>
             <input
               type="number"
               min="0.01"
               step="0.01"
               value={betAmount}
               onChange={e => setBetAmount(e.target.value)}
-              placeholder="Bet Amount"
-              className="border rounded p-2 w-full text-center text-gray-700"
+              placeholder="0.00"
+              className="bg-white/10 border-2 border-white/20 rounded-xl p-4 w-full text-center text-white placeholder-white/50 focus:outline-none focus:ring-4 focus:ring-blue-500/50 focus:border-blue-500 backdrop-blur-md transition-all"
               required
             />
             <button
               onClick={handlePlaceBetAndCreateGame}
-              className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center justify-center space-x-2 mt-2"
+              className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-semibold py-5 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center justify-center space-x-3 text-lg"
             >
-              <span className="text-xl">🎯</span>
+              <span className="text-2xl">💰</span>
               <span>Place Bet & Create Game</span>
             </button>
           </div>
           <button 
             onClick={() => { setInGame(false); setMode('choose'); }} 
-            className="text-gray-500 hover:text-gray-700 text-sm underline transition-colors"
+            className="text-white/70 hover:text-white text-sm underline transition-colors"
           >
-            Back to menu
+            ← Back to menu
           </button>
         </div>
       );
     }
     if (mode === 'join') {
       return (
-        <div className="flex flex-col items-center w-full max-w-md mx-auto p-8 bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl shadow-xl border border-gray-200">
-          <div className="flex items-center space-x-3 mb-6">
-            <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center">
-              <span className="text-white text-2xl">🚀</span>
+        <div className="flex flex-col items-center w-full max-w-md mx-auto p-10 glass-dark rounded-3xl shadow-2xl border border-white/20 animate-fade-in">
+          <div className="flex items-center space-x-4 mb-8">
+            <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl flex items-center justify-center shadow-lg">
+              <span className="text-white text-3xl">🚀</span>
             </div>
-            <h2 className="text-2xl font-bold text-gray-800">Join Game</h2>
+            <h2 className="text-3xl font-bold text-white">Join Game</h2>
           </div>
           <form onSubmit={e => { e.preventDefault(); handleJoinRoom(); }} className="w-full space-y-6">
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700">Room Code</label>
+            <div className="space-y-3">
+              <label className="block text-sm font-medium text-white/90">Room Code</label>
               <input
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:ring-4 focus:ring-purple-100 transition-all duration-200 font-mono text-center text-lg uppercase text-gray-700"
-                placeholder="Enter room code"
+                className="w-full px-5 py-4 bg-white/10 border-2 border-white/20 rounded-xl focus:border-purple-500 focus:ring-4 focus:ring-purple-500/50 transition-all duration-200 font-mono text-center text-2xl uppercase text-white placeholder-white/50 backdrop-blur-md"
+                placeholder="ABC123"
                 value={joinRoomId}
                 onChange={e => setJoinRoomId(e.target.value.toUpperCase())}
                 maxLength={6}
                 required
               />
             </div>
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700">Bet Amount (USDC)</label>
+            <div className="space-y-3">
+              <label className="block text-sm font-medium text-white/90">Bet Amount (USDC)</label>
               <input
                 type="number"
                 min="0.01"
                 step="0.01"
                 value={joinBetAmount}
                 onChange={e => setJoinBetAmount(e.target.value)}
-                placeholder="Bet Amount"
-                className="border rounded p-2 w-full text-center text-gray-700 "
+                placeholder="0.00"
+                className="bg-white/10 border-2 border-white/20 rounded-xl p-4 w-full text-center text-white placeholder-white/50 focus:outline-none focus:ring-4 focus:ring-purple-500/50 focus:border-purple-500 backdrop-blur-md transition-all"
                 required
               />
             </div>
-            <div className="space-y-3">
+            <div className="space-y-4 pt-4">
               <button
                 type="submit"
-                className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
+                className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-5 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 text-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                 disabled={isPending}
               >
-                {isPending ? 'Joining...' : 'Join Game'}
+                {isPending ? '⏳ Joining...' : '🚀 Join Game'}
               </button>
               <button
                 type="button"
                 onClick={() => setMode('choose')}
-                className="w-full text-gray-500 hover:text-gray-700 text-sm underline transition-colors"
+                className="w-full text-white/70 hover:text-white text-sm underline transition-colors"
               >
-                Back to menu
+                ← Back to menu
               </button>
             </div>
           </form>

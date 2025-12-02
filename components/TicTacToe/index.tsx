@@ -8,10 +8,12 @@ type SquareValue = 'X' | 'O' | null
 function Square({ value, onSquareClick }: { value: SquareValue; onSquareClick: () => void }) {
   return (
     <button
-      className="w-24 h-24 border-2 border-gray-400 text-4xl font-bold hover:bg-gray-100 transition-colors text-black"
+      className="w-24 h-24 border-2 border-gray-300 bg-white/90 hover:bg-white text-4xl font-bold transition-all duration-200 hover:scale-105 hover:shadow-lg rounded-lg text-gray-800 active:scale-95"
       onClick={onSquareClick}
     >
-      {value}
+      <span className={value === 'X' ? 'text-blue-600' : value === 'O' ? 'text-red-600' : ''}>
+        {value}
+      </span>
     </button>
   )
 }
@@ -221,43 +223,51 @@ export default function TicTacToe() {
 
   if (!gameStarted) {
     return (
-      <div className="w-full">
-        <div className="flex flex-col items-center space-y-6 bg-white p-8 rounded-lg shadow-lg">
-          <h2 className="text-2xl font-bold text-black">Enter Game Code</h2>
+      <div className="w-full max-w-2xl mx-auto animate-fade-in">
+        <div className="flex flex-col items-center space-y-8 glass-dark p-10 rounded-3xl shadow-2xl border border-white/20">
+          <div className="flex items-center space-x-3 mb-4">
+            <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+              <span className="text-white text-3xl">⭕</span>
+            </div>
+            <h2 className="text-3xl font-bold text-white">Tic-Tac-Toe</h2>
+          </div>
           {isConnected ? (
-            <div className="flex flex-col w-full max-w-md space-y-4">
-              <div className="flex flex-col space-y-2">
+            <div className="flex flex-col w-full max-w-md space-y-6">
+              <div className="flex flex-col space-y-4">
+                <label className="text-white/90 font-medium text-sm">Game Code</label>
                 <input
                   type="text"
                   value={gameCode}
                   onChange={(e) => setGameCode(e.target.value.toUpperCase())}
                   placeholder="Enter game code"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+                  maxLength={6}
+                  className="w-full px-5 py-4 bg-white/10 border-2 border-white/20 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/50 focus:border-blue-500 text-white placeholder-white/50 font-mono text-center text-xl uppercase backdrop-blur-md transition-all"
                 />
-                <div className="flex space-x-2">
+                <div className="flex space-x-3">
                   <button
-                    className="flex-1 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+                    className="flex-1 px-6 py-4 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
                     onClick={createNewGame}
                   >
-                    New Game
+                    🎯 New Game
                   </button>
                   <button
-                    className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                    className="flex-1 px-6 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
                     onClick={startGame}
                   >
-                    Join Game
+                    🚀 Join Game
                   </button>
                 </div>
               </div>
             </div>
           ) : (
-            <div className="flex flex-col items-center space-y-4">
-              <p className="text-gray-600">Please connect your wallet to start playing</p>
+            <div className="flex flex-col items-center space-y-6">
+              <p className="text-white/80 text-lg">Please connect your wallet to start playing</p>
               <button
-                className="px-8 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-lg font-semibold"
+                className="px-10 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center space-x-2"
                 onClick={() => connect({ connector: farcasterFrame() })}
               >
-                Connect Wallet
+                <span>🔗</span>
+                <span>Connect Wallet</span>
               </button>
             </div>
           )}
@@ -267,35 +277,47 @@ export default function TicTacToe() {
   }
 
   return (
-    <div className="w-full">
-      <div className="flex flex-col items-center space-y-6 bg-white p-8 rounded-lg shadow-lg">
+    <div className="w-full max-w-2xl mx-auto animate-fade-in">
+      <div className="flex flex-col items-center space-y-8 glass-dark p-10 rounded-3xl shadow-2xl border border-white/20">
         {!bothPlayersConnected ? (
-          <div className="flex flex-col items-center space-y-4">
-            <div className="text-xl font-semibold text-gray-600">
+          <div className="flex flex-col items-center space-y-6">
+            <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+            <div className="text-2xl font-semibold text-white">
               {isHost ? 'Waiting for opponent to join...' : 'Connecting to game...'}
             </div>
-            <div className="text-sm text-gray-500">
-              Game Code: <span className="font-mono font-bold">{gameCode}</span>
+            <div className="text-sm text-white/70 bg-white/10 px-4 py-2 rounded-lg">
+              Game Code: <span className="font-mono font-bold text-white">{gameCode}</span>
             </div>
           </div>
         ) : (
           <>
-            <div className="flex flex-col items-center space-y-4">
-              <div className="text-xl font-semibold text-green-600">Connected! Game is ready to play</div>
-              <div className="text-sm text-gray-500">{isHost ? 'You are X' : 'You are O'} (Opponent is {isHost ? 'O' : 'X'})</div>
+            <div className="flex flex-col items-center space-y-4 w-full">
+              <div className="flex items-center space-x-2 text-green-400 font-semibold text-lg">
+                <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                <span>Connected! Game is ready to play</span>
+              </div>
+              <div className="text-sm text-white/70 bg-white/10 px-4 py-2 rounded-lg">
+                {isHost ? 'You are X' : 'You are O'} (Opponent is {isHost ? 'O' : 'X'})
+              </div>
             </div>
-            <div className="text-3xl font-bold mb-4 text-black">{status}</div>
-            <div className="grid grid-cols-3 gap-3">
+            <div className={`text-2xl font-bold mb-2 px-6 py-3 rounded-xl ${
+              winner ? 'bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-300 border border-green-500/30' :
+              isDraw ? 'bg-gradient-to-r from-yellow-500/20 to-orange-500/20 text-yellow-300 border border-yellow-500/30' :
+              'bg-white/10 text-white border border-white/20'
+            }`}>
+              {status}
+            </div>
+            <div className="grid grid-cols-3 gap-4 p-6 bg-white/5 rounded-2xl backdrop-blur-md border border-white/10">
               {squares.map((square, i) => (
                 <Square key={i} value={square} onSquareClick={() => handleClick(i)} />
               ))}
             </div>
             {gameOver && (
               <button
-                className="mt-4 px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors"
+                className="mt-6 px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
                 onClick={resetGame}
               >
-                Play Again
+                🎮 Play Again
               </button>
             )}
           </>
